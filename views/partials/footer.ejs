@@ -1,144 +1,56 @@
-<footer class="simple-footer">
-    <div class="footer-container">
-        <div class="footer-main">
-            <div class="footer-brand">
-                <h3>SiparişYönetim</h3>
-                <p>Basit. Hızlı. Etkili.</p>
+<!-- footer.ejs -->
+<footer class="bg-white border-t border-gray-200 p-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <div class="mr-3 bg-blue-600 text-white w-8 h-8 rounded-md flex items-center justify-center">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <h3 class="text-gray-800 font-semibold">Sipariş Yönetim</h3>
             </div>
             
-            <div class="footer-links">
-                <a href="/">Ana Sayfa</a>
-                <a href="/orders">Siparişler</a>
-                <a href="/products">Ürünler</a>
-                <a href="/customers">Müşteriler</a>
-                <a href="/reports">Raporlar</a>
-                <a href="/help">Yardım</a>
-            </div>
-            
-            <div class="footer-social">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <div class="flex space-x-6">
+                <a href="/about" class="text-gray-600 hover:text-blue-600 transition-colors">
+                    Hakkında
+                </a>
+                <a href="/contact" class="text-gray-600 hover:text-blue-600 transition-colors">
+                    İletişim
+                </a>
+                <a href="/privacy" class="text-gray-600 hover:text-blue-600 transition-colors">
+                    Gizlilik Politikası
+                </a>
+                <a href="/terms" class="text-gray-600 hover:text-blue-600 transition-colors">
+                    Kullanım Şartları
+                </a>
             </div>
         </div>
         
-        <div class="footer-bottom">
-            <p>&copy; <%= new Date().getFullYear() %> Sipariş Yönetim Sistemi</p>
-            <p><i class="fas fa-envelope"></i> info@siparisyonetim.com</p>
+        <div class="border-t border-gray-200 mt-4 pt-4 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-gray-600 text-sm">
+                &copy; <%= new Date().getFullYear() %> Sipariş Yönetim Sistemi. Tüm hakları saklıdır.
+            </p>
+            
+            <div class="flex space-x-4 mt-3 md:mt-0">
+                <a href="#" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-blue-600 text-gray-600 hover:text-white flex items-center justify-center transition-colors">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-blue-600 text-gray-600 hover:text-white flex items-center justify-center transition-colors">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-blue-600 text-gray-600 hover:text-white flex items-center justify-center transition-colors">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-blue-600 text-gray-600 hover:text-white flex items-center justify-center transition-colors">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="mt-4 text-center text-gray-500 text-xs">
+            <p>Sürüm 1.0.0 | Son Güncelleme: Mart 2025</p>
         </div>
     </div>
 </footer>
 
 <!-- Font Awesome CDN bağlantısı -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-<style>
-    .simple-footer {
-        background-color: #2c3e50;
-        color: #fff;
-        padding: 30px 0 0 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    .footer-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-    
-    .footer-main {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        padding-bottom: 20px;
-    }
-    
-    .footer-brand h3 {
-        color: #3498db;
-        font-size: 22px;
-        margin: 0 0 5px 0;
-    }
-    
-    .footer-brand p {
-        margin: 0;
-        font-size: 14px;
-        color: #ecf0f1;
-    }
-    
-    .footer-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-    
-    .footer-links a {
-        color: #ecf0f1;
-        text-decoration: none;
-        font-size: 14px;
-        transition: color 0.2s ease;
-    }
-    
-    .footer-links a:hover {
-        color: #3498db;
-    }
-    
-    .footer-social {
-        display: flex;
-        gap: 15px;
-    }
-    
-    .footer-social a {
-        color: #ecf0f1;
-        background: rgba(255, 255, 255, 0.1);
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-    }
-    
-    .footer-social a:hover {
-        background: #3498db;
-        transform: translateY(-3px);
-    }
-    
-    .footer-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        margin-top: 10px;
-        font-size: 13px;
-        color: #bdc3c7;
-    }
-    
-    .footer-bottom i {
-        color: #3498db;
-        margin-right: 5px;
-    }
-    
-    /* Responsive tasarım */
-    @media screen and (max-width: 768px) {
-        .footer-main {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 20px;
-        }
-        
-        .footer-links {
-            justify-content: center;
-        }
-        
-        .footer-bottom {
-            flex-direction: column;
-            gap: 10px;
-            text-align: center;
-        }
-    }
-</style>
