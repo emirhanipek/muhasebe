@@ -39,7 +39,7 @@ const siparisler = [
 ];
 
 app.get('/', (req, res) => {
-    res.send('Anasayfaya Hoş Geldiniz');
+    res.send('GİTHUB HISSDA');
 });
 
 // Orders sayfasını EJS ile render et
