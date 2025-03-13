@@ -18,9 +18,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 const indexRouter = require('../routes/index');
 const ordersRouter = require('../routes/orders');
+const ordersDetailRouter = require('../routes/orders_detils');
 
 app.use('/', indexRouter);
 app.use('/orders', ordersRouter);
+app.use('/orders_detil', ordersDetailRouter);  
 
 // DB Bağlantısını test et
 testConnection().then(connected => {

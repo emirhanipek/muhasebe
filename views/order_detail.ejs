@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    @media print {
+    body {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+      background-color: white;
+    }
+    
+    .no-print {
+      display: none !important;
+    }
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    th, td {
+      padding: 8px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    thead {
+      background-color: #f9fafb !important;
+    }
+    
+    .shadow, .shadow-sm {
+      box-shadow: none !important;
+    }
+    
+    .bg-gray-50, .bg-gray-100 {
+      background-color: #f9fafb !important;
+    }
+  }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+      background-color: #f3f4f6;
+    }
+    
+    .mini-header {
+      background-color: white;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+    
+    .color-input {
+      width: 100px;
+    }
+    
+    .quantity-input {
+      width: 70px;
+    }
+    
+    .color-item {
+      transition: all 0.2s ease;
+    }
+    
+    .color-item:hover {
+      background-color: #f9fafb;
+    }
+    
+    /* Animasyonlar */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease forwards;
+    }
+    
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 1rem;
+      border-radius: 0.375rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      max-width: 24rem;
+      opacity: 0;
+      transform: translateY(-1rem);
+      transition: all 0.3s ease;
+    }
+    
+    .notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .notification-success {
+      background-color: #d1fae5;
+      border-left: 4px solid #10b981;
+      color: #065f46;
+    }
+    
+    .notification-error {
+      background-color: #fee2e2;
+      border-left: 4px solid #ef4444;
+      color: #b91c1c;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <!-- Mini Header -->
+  <header class="mini-header py-3 px-4 flex justify-between items-center mb-6">
+    <div class="flex items-center">
+      <a href="/orders" class="mr-4 text-gray-600 hover:text-gray-900">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <h1 class="text-xl font-semibold text-gray-800">Sipariş <%= siparis.marka %>  <%= siparis.model_no %> Detayları</h1>
+    </div>
+    
+  </header>
+  
+  <div class="container mx-auto px-4 pb-10">
+    <!-- Sipariş Bilgileri -->
+    <div class="bg-white p-6 rounded-lg shadow-sm mb-6 animate-fade-in">
+      <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-info-circle mr-2 text-blue-500"></i> Sipariş Bilgileri
+      </h2>
+      <button id="saveBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition-colors flex items-center">
+        <i class="fas fa-save mr-2"></i> Kaydet
+      </button>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-3 bg-gray-50 rounded-md">
+          <p class="text-sm text-gray-500 mb-1">Sipariş No</p>
+          <p class="font-semibold">#<%= siparis.idsiparis %></p>
+        </div>
+        <div class="p-3 bg-gray-50 rounded-md">
+          <p class="text-sm text-gray-500 mb-1">Model No</p>
+          <p class="font-semibold"><%= siparis.model_no %></p>
+        </div>
+        <div class="p-3 bg-gray-50 rounded-md">
+          <p class="text-sm text-gray-500 mb-1">Tarih</p>
+          <p class="font-semibold"><%= siparis.formattedTarih %></p>
+        </div>
+        <div class="p-3 bg-gray-50 rounded-md">
+          <p class="text-sm text-gray-500 mb-1">Marka</p>
+          <p class="font-semibold">
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+              <%= siparis.marka %>
+            </span>
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Renk Adet Bilgileri -->
+    <div class="bg-white p-6 rounded-lg shadow-sm animate-fade-in" style="animation-delay: 0.1s;">
+       <!-- Renk Adet Bilgileri başlık satırını değiştirin -->
+<div class="flex justify-between items-center mb-4">
+  <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+    <i class="fas fa-palette mr-2 text-green-500"></i> Renk ve Adet Bilgileri
+  </h2>
+  <div class="flex space-x-2">
+    <button id="printBtn" class="bg-purple-600 text-white px-3 py-1 rounded-md text-sm hover:bg-purple-700 transition-colors flex items-center">
+      <i class="fas fa-print mr-2"></i> Yazdır
+    </button>
+    <button id="addColorBtn" class="bg-green-600 text-white px-3 py-1 rounded-md text-sm hover:bg-green-700 transition-colors flex items-center">
+      <i class="fas fa-plus mr-2"></i> Renk Ekle
+    </button>
+  </div>
+</div>
+      
+      <form id="detailForm">
+        <input type="hidden" name="siparisId" value="<%= siparis.idsiparis %>">
+        
+        <div class="overflow-x-auto">
+          <div class="inline-block min-w-full">
+            <div class="shadow overflow-hidden border-b border-gray-200 rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">Sıra</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Renk</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adet</th>
+                    <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-16">İşlem</th>
+                  </tr>
+                </thead>
+                <tbody id="colorsContainer" class="bg-white divide-y divide-gray-200">
+                  <% if(typeof renkAdetPairs !== 'undefined' && renkAdetPairs.length > 0) { %>
+                    <% renkAdetPairs.forEach((pair, index) => { %>
+                      <tr class="color-item">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 item-number"><%= index + 1 %></td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <input type="text" name="renkler[]" value="<%= pair.renk %>" class="color-input px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" required>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <input type="number" name="adetler[]" value="<%= pair.adet %>" min="1" class="quantity-input px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" required>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button type="button" class="text-red-600 hover:text-red-900 delete-color-btn">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    <% }) %>
+                  <% } else { %>
+                    <tr class="color-item">
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 item-number">1</td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="text" name="renkler[]" class="color-input px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" required>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="number" name="adetler[]" min="1" value="1" class="quantity-input px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" required>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button type="button" class="text-red-600 hover:text-red-900 delete-color-btn">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  <% } %>
+                </tbody>
+                <tfoot class="bg-gray-50">
+                  <tr>
+                    <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-500">Toplam:</td>
+                    <td class="px-6 py-3"></td>
+                    <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900" id="totalQuantity">
+                      <% let toplam = 0; %>
+                      <% if(renkAdetPairs && renkAdetPairs.length > 0) { %>
+                        <% renkAdetPairs.forEach(pair => { toplam += parseInt(pair.adet) || 0; }) %>
+                      <% } %>
+                      <%= toplam %>
+                    </td>
+                    <td class="px-6 py-3"></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Notification -->
+  <div id="notification" class="notification">
+    <i class="fas fa-check-circle mr-3"></i>
+    <span id="notificationMessage">İşlem başarıyla tamamlandı.</span>
+    <button class="ml-auto text-current hover:text-opacity-75" id="closeNotification">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const colorsContainer = document.getElementById('colorsContainer');
+      const addColorBtn = document.getElementById('addColorBtn');
+      const saveBtn = document.getElementById('saveBtn');
+      const detailForm = document.getElementById('detailForm');
+      const totalQuantity = document.getElementById('totalQuantity');
+      const notification = document.getElementById('notification');
+      const notificationMessage = document.getElementById('notificationMessage');
+      const closeNotification = document.getElementById('closeNotification');
+      
+      // İlk yüklemede toplam hesapla
+      calculateTotal();
+      
+      // Yeni renk satırı ekle
+      addColorBtn.addEventListener('click', function() {
+        if (colorsContainer.querySelectorAll('.color-item').length >= 45) {
+          showNotification('En fazla 45 renk eklenebilir.', 'error');
+          return;
+        }
+        
+        const newRow = document.createElement('tr');
+        newRow.className = 'color-item animate-fade-in';
+        
+        const rowCount = colorsContainer.querySelectorAll('.color-item').length + 1;
+        
+        newRow.innerHTML = `
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 item-number">${rowCount}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <input type="text" name="renkler[]" class="color-input px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" required>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <input type="number" name="adetler[]" min="1" value="1" class="quantity-input px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm" required>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            <button type="button" class="text-red-600 hover:text-red-900 delete-color-btn">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        `;
+        
+        colorsContainer.appendChild(newRow);
+        updateItemNumbers();
+        calculateTotal();
+        
+        // Yeni eklenen satırdaki input'a odaklan
+        const newColorInput = newRow.querySelector('input[name="renkler[]"]');
+        newColorInput.focus();
+      });
+      
+      // Renk satırı sil
+      colorsContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.delete-color-btn')) {
+          const row = e.target.closest('.color-item');
+          
+          // En az bir renk satırı kalsın
+          if (colorsContainer.querySelectorAll('.color-item').length > 1) {
+            row.remove();
+            updateItemNumbers();
+            calculateTotal();
+          } else {
+            showNotification('En az bir renk girişi gereklidir.', 'error');
+          }
+        }
+      });
+      
+      // Input değişikliklerinde toplam hesapla
+      colorsContainer.addEventListener('input', function(e) {
+        if (e.target.classList.contains('quantity-input')) {
+          calculateTotal();
+        }
+      });
+      
+      // Bildirim kapatma
+      closeNotification.addEventListener('click', function() {
+        notification.classList.remove('show');
+      });
+      
+      // Formu kaydet
+      saveBtn.addEventListener('click', async function() {
+        // Kaydet butonunu devre dışı bırak
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Kaydediliyor...';
+        
+        // Tüm inputları kontrol et
+        const colorInputs = detailForm.querySelectorAll('input[name="renkler[]"]');
+        const quantityInputs = detailForm.querySelectorAll('input[name="adetler[]"]');
+        
+        let isValid = true;
+        
+        // Boş alanları kontrol et
+        colorInputs.forEach((input, index) => {
+          if (!input.value.trim()) {
+            input.classList.add('border-red-500');
+            isValid = false;
+          } else {
+            input.classList.remove('border-red-500');
+          }
+        });
+        
+        quantityInputs.forEach((input, index) => {
+          if (!input.value || parseInt(input.value) < 1) {
+            input.classList.add('border-red-500');
+            isValid = false;
+          } else {
+            input.classList.remove('border-red-500');
+          }
+        });
+        
+        if (!isValid) {
+          showNotification('Lütfen tüm alanları doldurun.', 'error');
+          resetSaveButton();
+          return;
+        }
+        
+        // Form verilerini hazırla
+        const siparisId = detailForm.querySelector('input[name="siparisId"]').value;
+        
+        const renkler = [];
+        console.log(renkler);
+        const adetler = [];
+        console.log(adetler);
+        
+        colorInputs.forEach(input => renkler.push(input.value.trim()));
+        quantityInputs.forEach(input => adetler.push(parseInt(input.value)));
+        
+        // API'ye gönder
+        try {
+          const response = await fetch(`/orders_detil/${siparisId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              renkler,
+              adetler
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.success) {
+            showNotification(data.message || 'Sipariş detayları başarıyla kaydedildi.', 'success');
+            
+            // İşlem başarılıysa toplamı güncelle
+            calculateTotal();
+            
+            // 1 saniye sonra sayfayı yenile (opsiyonel)
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else {
+            showNotification(data.message || 'Bir hata oluştu.', 'error');
+          }
+        } catch (error) {
+          console.error('Kaydetme hatası:', error);
+          showNotification('Bir hata oluştu. Lütfen tekrar deneyin.', 'error');
+        } finally {
+          resetSaveButton();
+        }
+      });
+      
+      // İtem numaralarını güncelle
+      function updateItemNumbers() {
+        const itemNumbers = colorsContainer.querySelectorAll('.item-number');
+        itemNumbers.forEach((item, index) => {
+          item.textContent = index + 1;
+        });
+      }
+      
+      // Toplam adet hesapla
+      function calculateTotal() {
+        const quantityInputs = detailForm.querySelectorAll('input[name="adetler[]"]');
+        let total = 0;
+        
+        quantityInputs.forEach(input => {
+          const quantity = parseInt(input.value) || 0;
+          total += quantity;
+        });
+        
+        totalQuantity.textContent = total;
+        return total;
+      }
+      
+      // Bildirim göster
+      function showNotification(message, type = 'success') {
+        notification.className = 'notification';
+        notification.classList.add(type === 'success' ? 'notification-success' : 'notification-error');
+        notificationMessage.textContent = message;
+        
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 5000);
+      }
+      
+      // Kaydet butonunu normal haline getir
+      function resetSaveButton() {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Kaydet';
+      }
+    });
+  </script>
+  <script>
+    // Yazdır butonunu etkinleştir
+const printBtn = document.getElementById('printBtn');
+printBtn.addEventListener('click', function() {
+  // Yazdırma öncesi stil ekleme
+  const originalStyles = document.head.innerHTML;
+  const printStyles = `
+    <style id="print-styles">
+      @media print {
+        body {
+          padding: 0;
+          margin: 0;
+          background-color: white;
+        }
+        
+        .mini-header, #addColorBtn, .delete-color-btn, #saveBtn, #notification {
+          display: none !important;
+        }
+        
+        .container {
+          width: 100% !important;
+          max-width: 100% !important;
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+        
+        .bg-white {
+          box-shadow: none !important;
+          border: 1px solid #e5e7eb;
+          margin-bottom: 20px !important;
+        }
+        
+        table {
+          width: 100% !important;
+        }
+                  
+        /* Her sayfanın sonuna yazdırma bilgisi ekle */
+        @page {
+          margin-bottom: 15mm;
+        }
+        
+        /* Yazdırma tarihi ve sayfa sayısı */
+        .page-info {
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          font-size: 9pt;
+          color: #6b7280;
+        }
+      }
+    </style>
+  `;
+  
+ 
+  // Sayfa bilgisini ekle
+  const pageInfo = document.createElement('div');
+  pageInfo.className = 'page-info hidden';
+  pageInfo.innerHTML = `Yazdırılma Tarihi: ${new Date().toLocaleString('tr-TR')}`;
+  document.body.appendChild(pageInfo);
+  
+  // Yazdırma stillerini ekle
+  document.head.insertAdjacentHTML('beforeend', printStyles);
+  
+  // Yazdırma diyalog penceresini göster
+  window.print();
+  
+  // Yazdırma sonrası eklenen elementleri kaldır
+  setTimeout(() => {
+    document.querySelectorAll('.print-header, .print-footer, .page-info').forEach(el => el.remove());
+    document.getElementById('print-styles')?.remove();
+  }, 1000);
+});
+  </script>
+  <!-- head kapatma etiketinden hemen önce ekleyin -->
+<script>
+  // Sipariş bilgilerini global değişkenlere aktar
+  const siparis = {
+    idsiparis: "<%= siparis.idsiparis %>",
+    model_no: "<%= siparis.model_no %>",
+    marka: "<%= siparis.marka %>",
+    formattedTarih: "<%= siparis.formattedTarih %>"
+  };
+</script>
+</body>
+</html>
