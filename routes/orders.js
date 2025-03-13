@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Siparis = require('../models/siparis');
+const Siparis = require('../models/orders');
 const { formatTarih } = require('../utils/helpers');
-const { pool } = require('../src/config/database'); // Pool'u burada içe aktarın
+const { pool } = require('../src/config/database'); 
 
-// Tüm siparişleri listele
+
+
 router.get('/', async (req, res) => {
     try {
         const siparisler = await Siparis.getAll();

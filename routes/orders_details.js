@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../src/config/database');
-const Siparis = require('../models/siparis');
 const { formatTarih } = require('../utils/helpers');
 
-// Detay sayfasını görüntüleme
+
 router.get('/:id', async (req, res) => {
     try {
       const siparisId = req.params.id;
@@ -54,7 +53,7 @@ router.get('/:id', async (req, res) => {
       }
       
       // Bilgileri view'a gönder
-      res.render('order_detail', {
+      res.render('orders_details', {
         title: `Sipariş #${siparis.idsiparis} Detayları`,
         siparis: {
           ...siparis,
@@ -71,8 +70,6 @@ router.get('/:id', async (req, res) => {
       });
     }
   });
-
-// Detayları kaydetme
 
 router.post('/:id', async (req, res) => {
     try {

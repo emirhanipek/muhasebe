@@ -1,5 +1,5 @@
 const express = require('express');
-const path = require('path');
+const path = require('node:path');
 const { testConnection } = require('./config/database');
 require('dotenv').config();
 
@@ -18,11 +18,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 const indexRouter = require('../routes/index');
 const ordersRouter = require('../routes/orders');
-const ordersDetailRouter = require('../routes/orders_detils');
+const ordersDetailRouter = require('../routes/orders_details');
 
 app.use('/', indexRouter);
 app.use('/orders', ordersRouter);
-app.use('/orders_detil', ordersDetailRouter);  
+app.use('/orders_details', ordersDetailRouter);  
 
 // DB Bağlantısını test et
 testConnection().then(connected => {
