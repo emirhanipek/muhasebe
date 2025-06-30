@@ -25,6 +25,17 @@ async function testConnection() {
     }
 }
 
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: "Kullanıcı bulunamadı" });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Hata oluştu", error });
+  }
+};
+
+
 // Export the pool and test function
 module.exports = {
     pool,
